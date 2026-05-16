@@ -1,15 +1,36 @@
- Real-Time Notification System Design
+Campus Notification System Design
 
- 1. Architectural Overview
-The system utilizes a decoupled, three-tier architecture comprising a React user interface, an Express gateway/orchestrator, and an isolated internal logging layer wrapper that communicates securely with the evaluation cluster.
+---
 
- 2. Component Layout
-Frontend (UI Layer):** Constructed via React and TypeScript. Interacts strictly over HTTPS with the API gateway layer using unified context management states.
-Backend (Application Logic Gateway):** Powered by Node.js, Express, and TypeScript. Handles system orchestration, routes, parameter sanitization, and hooks deep event tracking pipelines down to the remote monitoring framework.
-Logging Wrapper (Cross-cutting Concern):** An abstracted structural package injected natively across both tiers to register workflow successes, critical failures, and debugging diagnostics.
+Stage 1
 
-3. Modality Data Flow Mapping
-1. Client actions clear authentication thresholds on the frontend.
-2. The UI triggers a structured REST invocation to the Backend Gateway.
-3. The Gateway invokes the centralized Logger package.
-4. The Logger intercepts structural context attributes, verifies value constraints, applies bearer tokens, and triggers asynchronous execution hooks over to the Evaluation engine.
+ Overview
+
+REST API design for a campus notification platform supporting real-time
+updates for Placements, Events, and Results. Authentication is pre-authorised
+(no login/registration required from this service).
+
+---
+
+Core Actions
+
+| Action | Method | Endpoint |
+|---|---|---|
+| Fetch all notifications | GET | `/api/v1/notifications` |
+| Fetch single notification | GET | `/api/v1/notifications/{id}` |
+| Create notification | POST | `/api/v1/notifications` |
+| Mark notification as read | PATCH | `/api/v1/notifications/{id}/read` |
+| Mark all as read | PATCH | `/api/v1/notifications/read-all` |
+| Delete a notification | DELETE | `/api/v1/notifications/{id}` |
+| Get unread count | GET | `/api/v1/notifications/unread-count` |
+| Get priority inbox (top n) | GET | `/api/v1/notifications/priority?n=10` |
+
+---
+
+ Endpoint Contracts
+ GET `/api/v1/notifications`
+
+Fetches paginated notifications for a student. Student identity comes from
+a pre-authorised request header.
+
+**Request Headers**
